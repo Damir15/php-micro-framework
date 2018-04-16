@@ -42,4 +42,5 @@ class View implements \Countable
     {
         return count($this->data);
     }
+
 }
