@@ -2,40 +2,12 @@
 
 namespace App\Core;
 
-class View implements \Countable
+class View implements \Countable, IView
 {
-    protected $data = [];
-
-    public function __set($k, $v)
+    public function display($template, $data = [])
     {
-        $this->data[$k] = $v;
-    }
-
-    public function __get($k)
-    {
-        return $this->data[$k];
-    }
-
-    public function __isset($k)
-    {
-        return isset($this->data[$k]);
-    }
-
-    public function render($template)
-    {
-        ob_start();
-        foreach ($this->data as $prop => $value) {
-            $$prop = $value;
-        }
-        include $template;
-        $content = ob_get_contents();
-        ob_end_clean();
-        return $content;
-    }
-
-    public function display($template)
-    {
-        echo $this->render($template);
+        $path = $this->path($template);
+        echo $this->render($path, $data);
     }
 
     public function count()
@@ -43,4 +15,32 @@ class View implements \Countable
         return count($this->data);
     }
 
+    protected function path($template)
+    {
+        $item = str_replace('.', '/', $template);
+        $path = __DIR__ . '/../../App/Views/' . $item . '.php';
+
+        if (!file_exists($path)) {
+            throw new \Error('Template not found');
+        }
+
+        return $path;
+    }
+
+    protected function render($template, $data)
+    {
+        ob_start();
+
+        if (!empty($data)) {
+            foreach ($data as $prop => $value) {
+                $$prop = $value;
+            }
+        }
+        include $template;
+        $content = ob_get_contents();
+
+        ob_end_clean();
+
+        return $content;
+    }
 }
