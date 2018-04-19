@@ -6,6 +6,4 @@ ini_set('display_startup_errors', 1);
 
 require __DIR__ . '/autoload.php';
 
-$view = new \App\Core\View();
-$news = \App\Models\News::findAll();
-$view->display('pages.news', compact('news'));
+\App\Core\Application::run();

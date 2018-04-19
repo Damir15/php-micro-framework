@@ -2,17 +2,12 @@
 
 namespace App\Core;
 
-class View implements \Countable, IView
+class View implements IView
 {
     public function display($template, $data = [])
     {
         $path = $this->path($template);
         echo $this->render($path, $data);
-    }
-
-    public function count()
-    {
-        return count($this->data);
     }
 
     protected function path($template)
