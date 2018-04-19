@@ -12,13 +12,31 @@ class News extends Model
     public $description;
     public $author_id;
 
-    public static function findAll()
+    /**
+     * LAZY LOAD
+     *
+     * @param $name
+     * @return bool|null
+     */
+    public function __get($name)
     {
-        $news = parent::findAll();
-        foreach ($news as $new) {
-            $new->author = Author::findById($new->author_id);
+        switch ($name) {
+            case 'author':
+                return Author::findById($this->author_id);
+                break;
+            default:
+                return null;
         }
+    }
 
-        return $news;
+    public function __isset($name)
+    {
+        switch ($name) {
+            case 'author':
+                return !empty($this->author_id);
+                break;
+            default:
+                return false;
+        }
     }
 }
