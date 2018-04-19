@@ -10,4 +10,15 @@ class News extends Model
 
     public $title;
     public $description;
+    public $author_id;
+
+    public static function findAll()
+    {
+        $news = parent::findAll();
+        foreach ($news as $new) {
+            $new->author = Author::findById($new->author_id);
+        }
+
+        return $news;
+    }
 }

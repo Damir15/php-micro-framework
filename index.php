@@ -7,5 +7,5 @@ ini_set('display_startup_errors', 1);
 require __DIR__ . '/autoload.php';
 
 $view = new \App\Core\View();
-$users = \App\Models\User::findAll();
-$view->display('pages.index', compact('users'));
+$news = \App\Models\News::findAll();
+$view->display('pages.news', compact('news'));
